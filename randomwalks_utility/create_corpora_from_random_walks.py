@@ -1,5 +1,6 @@
 import pickle
 import codecs
+
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
@@ -46,7 +47,7 @@ def chunks(lst, n):
   for i in range(0, len(lst), n):
     yield lst[i:i + n]
 
-def generate_corpus_from_walks(walks, output_path_prefix="./randomwalks/rw_corpus_", output_path_suffix=""):
+def generate_corpus_from_walks(walks, output_path_prefix="./data/rw_corpus_", output_path_suffix=""):
   # how do we actually want to generate the corpus?
   # one option is to always dublicate the node in the middle..
   # also Goran says that we want to keep the relations as separate tokens in the vocab. I do not necessarily agree with this, but we try.
@@ -75,13 +76,22 @@ def generate_corpus_from_walks(walks, output_path_prefix="./randomwalks/rw_corpu
   with codecs.open(output_path, "w", "utf8") as out:
     out.write(text)
 
+def analyze_walks(path="./output/random_walk"):
+  walk = load_walks(path)
+  total_num_walks = len(walk)
+
+
 
 def main():
-  in_prefix = "randomwalks/random_walk_"
-  in_suffix = "1.0_1.0_2_15"
-  walks = load_walks(in_prefix + in_suffix + ".p")
-  generate_corpus_from_walks(walks, output_path_suffix=in_suffix + "_nl")
+  for in_suffix in ["1.0_1.0_5_20","1.0_1.0_5_30"]:
+    in_prefix = "./data/random_walk_full_assertions_"
+    #in_suffix = "1.0_1.0_5_10"
+    walks = load_walks(in_prefix + in_suffix + ".p")
+    generate_corpus_from_walks(walks, output_path_suffix=in_suffix + "full_assertions_nl")
 
 
 if __name__=="__main__":
   main()
+
+
+
